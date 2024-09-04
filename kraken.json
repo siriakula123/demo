@@ -1,0 +1,64 @@
+{
+    "$schema": "https://www.krakend.io/schema/v2.5/krakend.json",
+    "version": 3,
+    "name": "My lovely gateway",
+    "port": 8080,
+    "cache_ttl": "3600s",
+    "timeout": "3s",
+    "extra_config": {
+      "telemetry/logging": {
+        "level":  "DEBUG",
+        "prefix": "[KRAKEND]",
+        "syslog": false,
+        "stdout": true
+      },
+      "telemetry/metrics": {
+        "collection_time": "60s",
+        "proxy_disabled": false,
+        "router_disabled": false,
+        "backend_disabled": false,
+        "endpoint_disabled": false,
+        "listen_address": ":8090"
+      },
+      "router": {
+        "return_error_msg": true
+      }
+    },
+    "endpoints": [
+  {
+    "endpoint": "/api/kakend/config",
+    "method":"GET",
+    "output_encoding": "json",
+    "backend": [
+      {
+        "url_pattern": "/config",
+        "method": "GET",
+        "host": [
+          "https://jsonplaceholder.typicode.com/posts"
+        ],
+        "group": "",
+        "mapping": { }
+      }
+    ],
+    "extra_config": {
+        "security/cors": {
+            "allow_origins": [
+                "*"
+            ]
+            ,
+            "allow_methods": [
+                "GET",
+                "HEAD",
+                "POST"
+            ],
+            "expose_headers": [
+                "Content-Length",
+                "Content-Type"
+            ],
+            "allow_headers": ["Accept-Language"]
+        }
+    },
+    "input_headers": ["*"]
+  }
+    ]
+}
